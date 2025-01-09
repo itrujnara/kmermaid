@@ -43,6 +43,44 @@
                 }
             }
         },
+        "general_options": {
+            "title": "General options",
+            "type": "object",
+            "description": "General options for k-mer analysis",
+            "default": "",
+            "properties": {
+                "ksizes": {
+                    "type": "string",
+                    "description": "Values of k to use in the analysis, separated by commas.",
+                    "fa_icon": "fas fa-calculator"
+                },
+                "molecule": {
+                    "type": "string",
+                    "description": "The molecule(s) to compare on, separated by commas.",
+                    "fa_icon": "fas fa-dna"
+                }
+            },
+            "fa_icon": "fas fa-cogs"
+        },
+        "sourmash_options": {
+            "title": "Sourmash options",
+            "type": "object",
+            "description": "Options for k-mer analysis with Sourmash",
+            "default": "",
+            "properties": {
+                "sourmash_num": {
+                    "type": "string",
+                    "description": "The number of k-mers to include in Sourmash sketches. Mutually exclusive with `sourmash_scale`.",
+                    "fa_icon": "fas fa-dog"
+                },
+                "sourmash_scale": {
+                    "type": "string",
+                    "description": "A factor used to determine the number of k-mers in the sketch based on genome size. Mutually exclusive with `sourmash_num`.",
+                    "fa_icon": "fas fa-dog"
+                }
+            },
+            "fa_icon": "fas fa-dog"
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
@@ -187,7 +225,12 @@
         {
             "$ref": "#/$defs/input_output_options"
         },
-
+        {
+            "$ref": "#/$defs/general_options"
+        },
+        {
+            "$ref": "#/$defs/sourmash_options"
+        },
         {
             "$ref": "#/$defs/institutional_config_options"
         },

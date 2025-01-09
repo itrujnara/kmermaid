@@ -7,18 +7,32 @@
     "items": {
         "type": "object",
         "properties": {
-            "sample": {
+            "id": {
                 "type": "string",
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"]
+            },
+            "fasta_dna": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.fa(sta)?$",
+                "errorMessage": "DNA fasta file cannot contain spaces and must have extension '.fa' or '.fasta'"
+            },
+            "fasta_protein": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.fa(sta)?$",
+                "errorMessage": "Protein fasta file cannot contain spaces and must have extension '.fa' or '.fasta'"
             },
             "fastq_1": {
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "errorMessage": "FastQ file for reads 1 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             },
             "fastq_2": {
                 "type": "string",
@@ -26,8 +40,43 @@
                 "exists": true,
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+            },
+            "csv_single": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.csv$",
+                "errorMessage": "CSV file cannot contain spaces and must have extension '.csv'"
+            },
+            "csv_paired": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.csv$",
+                "errorMessage": "CSV file cannot contain spaces and must have extension '.csv'"
+            },
+            "bam": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.bam$",
+                "errorMessage": "BAM file cannot contain spaces and must have extension '.bam'"
+            },
+            "tenx": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.(tar\\.gz|tgz)$",
+                "errorMessage": "10x TGZ file cannot contain spaces and must have extension '.bam'"
+            },
+            "sra": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+$",
+                "errorMessage": "SRA ID cannot contain spaces"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["sample"]
     }
 }

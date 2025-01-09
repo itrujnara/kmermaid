@@ -69,15 +69,6 @@ workflow PIPELINE_INITIALISATION {
 
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
-        }
-        .groupTuple()
         .map { samplesheet ->
             validateInputSamplesheet(samplesheet)
         }
@@ -149,15 +140,31 @@ workflow PIPELINE_COMPLETION {
 // Validate channels from input samplesheet
 //
 def validateInputSamplesheet(input) {
-    def (metas, fastqs) = input[1..2]
+    def (meta, fasta_dna, fasta_protein, fastq_1, fastq_2, csv_single, csv_pair, bam, tenx, sra) = input
 
-    // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
-    def endedness_ok = metas.collect{ meta -> meta.single_end }.unique().size == 1
-    if (!endedness_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
+    // Check that the sample contains some input file
+    if (fasta_dna.isEmpty() && fasta_protein.isEmpty() && fastq_1.isEmpty() && fastq_2.isEmpty() && csv_single.isEmpty() && csv_pair.isEmpty() && bam.isEmpty() && tenx.isEmpty() && sra.isEmpty()) {
+        error("Please check input samplesheet -> No input files found for sample: ${meta.id}")
     }
 
-    return [ metas[0], fastqs ]
+    // Check that the sample contains only one input file
+    if (fasta_dna.size() + fasta_protein.size() + fastq_1.size() + csv_single.size() + csv_pair.size() + bam.size() + tenx.size() + sra.size() > 1) {
+        error("Please check input samplesheet -> Multiple input types found for sample: ${meta.id}")
+    }
+
+    // Check that if fastq2 is provided, fastq1 is also provided
+    if (fastq_2.size() > 0 && fastq_1.size() == 0) {
+        error("Please check input samplesheet -> Fastq2 provided without Fastq1 for sample: ${meta.id}")
+    }
+
+    // Add paired end information to the metadata
+    if (fastq_1.size() > 0 && fastq_2.size() > 0 || csv_pair.size() > 0) {
+        meta.paired_end = true
+    } else {
+        meta.paired_end = false
+    }
+
+    return [meta, fasta_dna, fasta_protein, fastq_1, fastq_2, csv_single, csv_pair, bam, tenx, sra]
 }
 //
 // Generate methods description for MultiQC
