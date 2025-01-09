@@ -52,12 +52,14 @@
                 "ksizes": {
                     "type": "string",
                     "description": "Values of k to use in the analysis, separated by commas.",
-                    "fa_icon": "fas fa-calculator"
+                    "fa_icon": "fas fa-calculator",
+                    "default": "21,27,33,51"
                 },
                 "molecule": {
                     "type": "string",
                     "description": "The molecule(s) to compare on, separated by commas.",
-                    "fa_icon": "fas fa-dna"
+                    "fa_icon": "fas fa-dna",
+                    "default": "dna,protein"
                 }
             },
             "fa_icon": "fas fa-cogs"
@@ -71,7 +73,8 @@
                 "sourmash_num": {
                     "type": "string",
                     "description": "The number of k-mers to include in Sourmash sketches. Mutually exclusive with `sourmash_scale`.",
-                    "fa_icon": "fas fa-dog"
+                    "fa_icon": "fas fa-dog",
+                    "default": "1000,4000,16000"
                 },
                 "sourmash_scale": {
                     "type": "string",
